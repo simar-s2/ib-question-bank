@@ -1,13 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 const topics = [
-  'Number and Algebra',
+  'Algebra',
   'Functions',
-  'Geometry and Trigonometry',
-  'Statistics and Probability',
   'Calculus',
+  'Statistics',
+  'Probability',
+  'Vectors',
+  'Geometry',
+  'Number & Sets',
 ];
 
 export default function HomePage() {
@@ -24,7 +28,7 @@ export default function HomePage() {
           IB Math Question Bank
         </h1>
         <p className="text-center text-gray-600 mb-8">
-          Browse exam questions sorted by topic. Free, clear, and easy to use.
+          Browse exam questions sorted by topic.
         </p>
 
         <input
@@ -36,14 +40,16 @@ export default function HomePage() {
         />
 
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {filteredTopics.map((topic) => (
-            <li
-              key={topic}
-              className="p-4 bg-white rounded-xl shadow hover:shadow-md transition cursor-pointer"
-            >
-              {topic}
-            </li>
-          ))}
+          {filteredTopics.map((topic) => {
+            const slug = topic.toLowerCase().replace(/\s+/g, '-');
+            return (
+              <Link key={slug} href={`/topics/${slug}`}>
+                <li className="p-4 bg-white rounded-xl shadow hover:shadow-md transition cursor-pointer">
+                  {topic}
+                </li>
+              </Link>
+            );
+          })}
         </ul>
       </div>
     </main>
