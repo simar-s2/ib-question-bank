@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IB Math Question Bank
 
-## Getting Started
+A browser for IB Mathematics exam questions, sorted by topic, with an admin route
+for uploading past-paper PDFs. Built with Next.js.
 
-First, run the development server:
+> 🚧 **Early prototype.** The topic list and per-topic questions are hard-coded
+> sample data, and the PDF pipeline is scaffolded but not complete (see below).
+
+> 📸 **Screenshot needed**: the home page with the topic grid and the search box. Save to `docs/home.png` and replace this line with `![Home](docs/home.png)`.
+
+## Quickstart
 
 ```bash
+git clone https://github.com/simar-s2/ib-question-bank.git
+cd ib-question-bank
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How it works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+A Next.js App Router project with three routes:
 
-## Learn More
+| Route | What it does |
+|---|---|
+| `/` | lists the eight IB Math topics; a client-side text filter narrows the list as you type |
+| `/topics/[slug]` | shows the questions for one topic, looked up from a `topicData` map by slug; unknown slugs return a 404 |
+| `/admin/upload` | a file input that `POST`s a PDF to `/api/upload-pdf` |
 
-To learn more about Next.js, take a look at the following resources:
+**The upload route** (`/api/upload-pdf`) saves the incoming PDF to a temp path and
+`spawn`s `python3 scripts/process_pdf.py <file>`, resolving the request when that
+process exits cleanly. The Python script is the intended place for OCR and
+question extraction. It isn't in the repo yet, so uploads currently succeed only
+as far as the spawn.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## What it does (today)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Browse IB Math topics with live search
+- Open a topic to see its sample questions
+- Upload a PDF from the admin page (backend processing is a work in progress)
 
-## Deploy on Vercel
+## Roadmap
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Real question storage instead of the hard-coded `topicData`
+- The `scripts/process_pdf.py` extractor behind the upload route
+- Per-question rendering (math typesetting, markschemes)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Built with
+
+Next.js 15 · React 19 · TypeScript · Tailwind CSS
+
+## License
+
+Released under the [MIT License](LICENSE).
